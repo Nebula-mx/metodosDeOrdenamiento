@@ -16,9 +16,19 @@ def resetFile(name):
     with open(name, "w", encoding="utf-8") as file:
         file.write("")
 
+def readFile(name):
+    lines = []
+    with open(name, "r", encoding="utf-8") as file:
+        for line in file:
+            rawLine = line.strip()
+            lines.append(rawLine)
+    return lines
+
 def benchMethods(method, fileName, maxCount=10000, steps=100, unorderedList=[]):
     if os.path.exists(fileName):
         os.remove(fileName)
+
+    createFile(f"generatedLists/{fileName}.csv", "N;Tiempo" + "\n")
 
     for x in range(steps, maxCount + steps, steps):
         lista_nueva = copy.deepcopy(unorderedList[:x])
