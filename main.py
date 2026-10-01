@@ -26,9 +26,9 @@ def main():
         "selectionSort": lambda values: selection_sort(values, len(values)),
     }
 
-    # for name, sort in algorithms.items():
-    #     resetFile(f"generatedLists/{name}.csv")
-    #     benchMethods(sort, name, 10000, 100, numbers)
+    for name, sort in algorithms.items():
+        resetFile(f"generatedLists/{name}.csv")
+        benchMethods(sort, name, 10000, 100, numbers)
 
     datasheet = {}
 
