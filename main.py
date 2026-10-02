@@ -4,6 +4,7 @@ from SortingFunctions.mergeSort import merge_sort
 from SortingFunctions.quickSort import quick_sort
 from SortingFunctions.selectionSort import selection_sort
 from generateFile import resetFile, benchMethods, readFile
+from itertools import combinations
 import csv
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -12,8 +13,6 @@ import random
 def generateRandoms(length, minRand, maxRand):
   numbers = random.sample(range(minRand, maxRand + 1), length)
   return numbers
-
-times = {}
 
 def main():
     numbers = generateRandoms(10000, 0, 10000)
@@ -26,13 +25,12 @@ def main():
         "selectionSort": lambda values: selection_sort(values, len(values)),
     }
 
-    for name, sort in algorithms.items():
-        resetFile(f"generatedLists/{name}.csv")
-        benchMethods(sort, name, 10000, 100, numbers)
+    # for name, sort in algorithms.items():
+    #     resetFile(f"generatedLists/{name}.csv")
+    #     benchMethods(sort, name, 10000, 100, numbers)
 
     datasheet = {}
 
-    counter = 1
     for name, sort in algorithms.items():
         data = pd.read_csv(f"generatedLists/{name}.csv", sep=";")
 
@@ -42,19 +40,23 @@ def main():
         key = name
         datasheet[key] = data.Tiempo
 
-        counter += 1
+    metodos = [key for key in datasheet.keys() if key != "x"]
 
-    plt.figure(figsize=(8, 5))
-    for key in datasheet:
-        if key != "x":
-            plt.plot(datasheet["x"], datasheet[key], label=key)
+    for metodo1, metodo2 in combinations(metodos, 2):
+        plt.figure(figsize=(8, 5))
 
-    plt.xlabel("N (Tamaño de la lista)")
-    plt.ylabel("Tiempo (s)")
-    plt.title("Comparativa de Algoritmos")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+        plt.plot(datasheet["x"], datasheet[metodo1], label=metodo1, marker="o")
+        plt.plot(datasheet["x"], datasheet[metodo2], label=metodo2, marker="s")
+
+        plt.xlabel("N (Tamaño de la lista)")
+        plt.ylabel("Tiempo (s)")
+        plt.title(f"Comparativa: {metodo1} vs {metodo2}")
+        plt.legend()
+        plt.grid(True)
+
+        plt.show()
+
+
 
 if __name__ == "__main__":
   main()
